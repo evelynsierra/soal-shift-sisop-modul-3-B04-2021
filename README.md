@@ -8,6 +8,6 @@ NRP | NAMA
 05111940000139  | Zahrotul Adillah
 
 
-#Soal 1#
-#Soal 2#
-#Soal 3#
+## Soal 1 ##
+## Soal 2 ##
+## Soal 3 ##
