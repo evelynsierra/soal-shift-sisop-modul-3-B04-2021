@@ -1,7 +1,3 @@
-// This program is an example of how to run a command such as
-// ps aux | grep root | grep sbin
-// using C and Unix.
-
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
