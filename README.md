@@ -64,6 +64,7 @@ printf("Hasil Perkalian Matriks :\n");
   	for (i = 0; i < baris1; i++) {
     	for (j = 0; j < kolom2; j++) {
     		for (k = 0; k< 3; k++){
+			value[i][j]=0;
       			value[i][j] += mx1[i][k] * mx2[k][j];
 			}
       		printf("%d ",value[i][j]);
@@ -156,11 +157,11 @@ long long except(int n){
 void *kondisi(void* arg){
 	long long angka = *(long long*)arg;
 	if(isnull)//=0
-		printf("0 ");
+		printf("0\t");
 	else if(selisih<1) /// <1
-    	printf("%lld ", factorial(angka));
+    	printf("%lld\t", factorial(angka));
 	else//>1
-		printf("%lld ", except(angka));
+		printf("%lld\t", except(angka));
 }
 ```
 Saat membuat thread, menjalankan fungsi kondisi dengan rincian sebagai berikut :
@@ -270,6 +271,7 @@ Pada parent fork pertama, akan berjalan :
 - Membuat fork kedua
 - Pada child fork kedua, akan dijalankan perintah `sort -nrk 3.3` dan menuliskan output pada pipe kedua 
 - Pada parent fork kedua, akan dijalankan perintah `head -5` dan menuliskan output pada stdout
+#### Screenshoot Hasil ####
 
 ## Soal 3 ##
 ## Kendala ##
