@@ -42,6 +42,7 @@ int main() {
   	printf("Hasil Perkalian Matriks :\n");
   	for (i = 0; i < baris1; i++) {
     	for (j = 0; j < kolom2; j++) {
+		value[i][j]=0;
     		for (k = 0; k< 3; k++){
       			value[i][j] += mx1[i][k] * mx2[k][j];
 			}
