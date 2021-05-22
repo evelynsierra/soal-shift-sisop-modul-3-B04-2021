@@ -46,7 +46,7 @@ int main() {
     		for (k = 0; k< 3; k++){
       			value[i][j] += mx1[i][k] * mx2[k][j];
 			}
-      		printf("%d ",value[i][j]);
+      		printf("%d\t",value[i][j]);
    	 	}
     	printf("\n");
   	}
