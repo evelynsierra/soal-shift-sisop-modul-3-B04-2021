@@ -34,11 +34,11 @@ long long except(int n){
 void *kondisi(void* arg){
 	long long angka = *(long long*)arg;
 	if(isnull)//=0
-		printf("0 ");
+		printf("0\t");
 	else if(selisih<1) /// <1
-    	printf("%lld ", factorial(angka));
+    	printf("%lld\t", factorial(angka));
 	else//>1
-		printf("%lld ", except(angka));
+		printf("%lld\t", except(angka));
 }
 
 int main(){
@@ -49,7 +49,7 @@ int main(){
     value = shmat(shmid, NULL, 0);
     
     input();
-    
+    printf("Matriks Hasil :\n");
     pthread_t tid[baris*kolom];
     int index=0;
     for(i = 0; i < baris; i++){
