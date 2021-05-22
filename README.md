@@ -272,6 +272,12 @@ Pada parent fork pertama, akan berjalan :
 - Pada child fork kedua, akan dijalankan perintah `sort -nrk 3.3` dan menuliskan output pada pipe kedua 
 - Pada parent fork kedua, akan dijalankan perintah `head -5` dan menuliskan output pada stdout
 #### Screenshoot Hasil ####
+- Hasil pada 2a dan 2b
 
+![2a2b](https://user-images.githubusercontent.com/72771774/119224933-1083e800-bb2b-11eb-9428-aade157cfef0.PNG)
+
+- Hasil pada 2c dibandingkan dengan langsung input di terminal akan sama
+
+![2c](https://user-images.githubusercontent.com/72771774/119224934-124dab80-bb2b-11eb-8699-c88b69e46b33.PNG)
 ## Soal 3 ##
 ## Kendala ##
