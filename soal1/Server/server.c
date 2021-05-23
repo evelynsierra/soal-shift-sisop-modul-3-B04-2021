@@ -1,12 +1,12 @@
 #include<stdio.h>
-#include<string.h>	//strlen
-#include<stdlib.h>	//strlen
+#include<string.h>	
+#include<stdlib.h>	
 #include<sys/socket.h>
 #include<sys/types.h>
 #include<sys/stat.h>
-#include<arpa/inet.h>	//inet_addr
-#include<unistd.h>	//write
-#include<pthread.h> //for threading , link with lpthread
+#include<arpa/inet.h>	
+#include<unistd.h>	
+#include<pthread.h> 
 
 
 void *connection_handler(void *);
