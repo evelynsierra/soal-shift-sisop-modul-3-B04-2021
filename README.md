@@ -573,7 +573,7 @@ else if (!strncmp(choice, "delete", 6))
    return 0;
 }
 ```
-###Hasil Output###
+### Hasil Output ###
 
 - 1. Register, login dan add
 ![register, login, add](https://user-images.githubusercontent.com/80528848/119257904-979b9380-bbf1-11eb-841c-e8ab0d9ca5de.png)
