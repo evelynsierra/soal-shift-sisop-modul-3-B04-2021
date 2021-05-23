@@ -11,7 +11,8 @@ NRP | NAMA
 ## Soal 1 ##
 Keverk adalah orang yang cukup ambisius dan terkenal di angkatannya. Sebelum dia menjadi ketua departemen di HMTC, dia pernah mengerjakan suatu proyek dimana keverk tersebut meminta untuk membuat server database buku. Proyek ini diminta agar dapat digunakan oleh pemilik aplikasi dan diharapkan bantuannya dari pengguna aplikasi ini. 
 
-Server.c 
+-Server.c 
+
 Pada fungsi main terdapat fungsi untuk membuat file akun (akun.txt) 
 Selanjutnya akan membuat socket baru pada fungsi socket_desc, jika gagal maka akan print output “Could not create socket”.
 void *connection_handler(void *);
