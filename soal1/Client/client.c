@@ -188,15 +188,8 @@ int main(int argc, char const *argv[]) {
                         printf("%s\n", buffer);
                         bzero(buffer, 1024);
                     }
-                    // else if (!strcmp(choice, "exit"))
-                    // {
-                        
-                    //     break;
-                    // }
-
                 }
             }
-
         }
 	}
 	
