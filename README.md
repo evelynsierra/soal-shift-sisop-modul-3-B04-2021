@@ -280,4 +280,226 @@ Pada parent fork pertama, akan berjalan :
 
 ![2c](https://user-images.githubusercontent.com/72771774/119224934-124dab80-bb2b-11eb-8699-c88b69e46b33.PNG)
 ## Soal 3 ##
+Pada soal 3 ini, kita perlu membuat program yang menerima perintah `-f`, `-d`, dan `*`.
+Perintah `-f` artinya mengkategorikan file dengan ekstensi yang sama, dengan nama folder menggunakan nama ekstensi file yang sama.
+
+Pertama, kita harus membuat function yang bisa mengecek apakah path yang dimasukkan memiliki file atau tidak
+```c
+int is_file(const char *path)
+{
+    struct stat path_stat;
+    stat(path, &path_stat);
+    return S_ISREG(path_stat.st_mode);
+}
+```
+Pada main program, kita membuat thread dan memanggil function `fcommand()` sebagai penghubung.
+```c
+void *fcommand(void* arg)
+{
+    args_struct args = *(args_struct*) arg;
+    movefileF(args.asal, args.cwd);
+    pthread_exit(0);
+
+}
+```
+Selanjutnya gunakan function `movefileF()` untuk memindahkan file ke dalam folder baru, dengan nama folder barunya adalah nama ekstensi file tersebut
+```c
+void movefileF(char *argv, char *cwd)
+{
+    int hiddenfile = 0;
+    char string[500];
+    strcpy(string, argv);
+
+    int isfile = is_file(string);
+    char* tipe = strrchr(string, '.');
+    char* nama = strrchr(string, '/');
+
+    if(nama[1] == '.')
+    {
+        hiddenfile = 1; //is hidden file
+    }
+
+    char tipeLow[100];
+    if(tipe)
+    {
+            strcpy(tipeLow, tipe);
+            for(int i = 0; tipeLow[i]; i++){
+                tipeLow[i] = tolower(tipeLow[i]);
+            }
+    }
+    else{
+        if(!isfile)
+        {
+            printf("This is folder\n");
+        }
+        else
+        {
+            strcpy(tipeLow, " Hidden"); // no extention
+        }
+    }
+
+        if(hiddenfile)
+        {
+            strcpy(tipeLow," Hidden");
+        }
+        mkdir((tipeLow + 1), 0777);
+
+        size_t len = 0 ;
+        char a[500] ;
+        strcpy(a, argv);
+        char b[500] ;
+        strcpy(b, cwd);
+        strcat(b, "/");
+        strcat(b, tipeLow+1);
+        strcat(b, nama);
+        if (!rename(a,b)) {
+            printf("Berhasil Dikategorikan\n");
+        }
+        else
+        {
+            printf("Sad, Gagal :(\n");
+        }
+        remove(a);
+    
+}
+```
+Perintah `-d` juga memiliki function yang sama dengan `-f`, bedanya adalah pengkategorian direktori dan output hasilnya
+```c
+    else if(strcmp(argv[1], "-d") == 0)
+    {
+        char asal[1000];
+        strcpy(asal,argv[2]);
+        sortfile(asal);
+    }
+```
+Pada main program, akan memanggil function `sortfile()` untuk mengelompokkan folder yang diinginkan dan dibaca file yang didalamnya
+```c
+void sortfile(char *asal)
+{
+    args_struct args;
+    flag = 1;
+    strcpy(args.cwd, "/Users/evelynsierra/ITS/Semester_4/Sisop/soal-shift-sisop-modul-3-B04-2021-main/soal3/soal3");
+    DIR *dirp;
+    struct dirent *entry;
+    dirp = opendir(asal);
+    int index = 0;
+    while((entry = readdir(dirp)) != NULL)
+    {
+        if(entry->d_type == DT_REG)
+        {
+            char filename[305];
+            sprintf(filename,"%s/%s",asal, entry->d_name);
+            strcpy(args.asal,filename);
+
+            if(strcmp(filename,"/Users/evelynsierra/ITS/Semester_4/Sisop/soal-shift-sisop-modul-3-B04-2021-main/soal3/soal3/soal3.c") != 0)
+            {
+                pthread_create(&tid[index], NULL, dcommand, (void *)&args);
+                printf("%s\n", filename);
+                sleep(1);
+                index++;
+            }
+        }
+    }
+
+    if(!flag)
+    {
+        printf("Yah gagal disimpan\n");
+    }
+    else
+    {
+        printf("Direktori sudah disimpan\n");
+    }
+}
+```
+
+Setelah itu, memanggil function `dcommand` dan `movefileD`.
+```c
+void *dcommand(void* arg)
+{
+    args_struct args = *(args_struct*) arg;
+    movefileD(args.asal, args.cwd);
+    pthread_exit(0);
+
+}
+```
+
+```c
+void movefileD(char *argv, char *cwd)
+{
+    int hiddenfile = 0;
+    char string[500];
+    strcpy(string, argv);
+    int isFile = is_file(string);
+    char* tipe = strrchr(string,'.');
+    char* nama = strrchr(string, '/');
+
+    if(nama[1] == '.')
+    {
+        hiddenfile = 1;
+    }
+
+    char tipeLow[100];
+    if(tipe)
+    {
+            strcpy(tipeLow, tipe);
+            for(int i = 0; tipeLow[i]; i++){
+                tipeLow[i] = tolower(tipeLow[i]);
+            }
+    }
+    else
+    {
+        if(!isFile)
+        {
+            printf("This is a folder\n");
+            return;
+        }
+        else
+        {
+            strcpy(tipeLow, " Unknown"); //no extention
+        }
+    }
+
+    if(hiddenfile)
+    {
+        strcpy(tipeLow, " Hidden");
+    }
+    mkdir((tipeLow + 1), 0777);
+
+     size_t len = 0 ;
+        char a[1000] ;
+        strcpy(a, argv);
+        char b[1000] ;
+        strcpy(b, cwd);
+        strcat(b, "/");
+        strcat(b, tipeLow+1);
+        strcat(b, nama);
+        if (rename(a,b)) 
+        {
+            flag=0;
+        }
+
+        remove(a);
+}
+```
+Dan yang terakhir adalah perintah `*`, alur pemanggilannya sama dengan perintah `-d`. Bedanya adalah alamat folder yang dikirimkan adalah alamat folder tetap.
+
+```c
+    else if(strcmp(argv[1], "*") == 0)
+    {
+        char asal[] = "/Users/evelynsierra/ITS/Semester_4/Sisop/soal-shift-sisop-modul-3-B04-2021-main/soal3/soal3";
+
+        sortfile(asal);
+    }
+```
+#### Screenshoot Hasil ####
+![2](https://user-images.githubusercontent.com/55088939/119247118-5c797000-bbb1-11eb-9bc4-4c4860184e17.jpg)
+![3](https://user-images.githubusercontent.com/55088939/119247120-5daa9d00-bbb1-11eb-97b6-559d6fe755ee.jpg)
+![4](https://user-images.githubusercontent.com/55088939/119247121-5e433380-bbb1-11eb-9a79-69331ccd81d9.jpg)
+![6](https://user-images.githubusercontent.com/55088939/119247122-5edbca00-bbb1-11eb-9dcf-d391d159d914.jpg)
+
+
+
 ## Kendala ##
+ - Tidak mengeluarkan hasil output berupa berhasil/gagal dikategorikan
+ - Belum bisa mengelompokkan extention berupa angka
+ - File di dalam folder belum terpindah karena belum memakai `/`
