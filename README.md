@@ -471,6 +471,10 @@ else if (!strncmp(choice, "delete", 6))
                    write(sock, buffer, 1024);
                    bzero(buffer, 1024);
                }
+```
+Command find pada server untuk menampilkan nama file yang dicari dengan memasukkan input yaitu nama buku dan menyamakan dengan ekstensinya. Apabila tidak berhasil ditemukan maka output ‘buku tidak ditemukan’
+
+```c
                else if (!strncmp(choice, "find", 4))
                {
                    char temp[1024], namabuku[1024];
@@ -566,14 +570,196 @@ else if (!strncmp(choice, "delete", 6))
            fclose(fp);
        }
    }
-      
-   //Free the socket pointer
-   free(socket_desc);
-  
-   return 0;
-}
 ```
+  
 - Client.c
+Fungsi untuk mulai menjalankan program
+```c
+char choice[1024];
+   while (1)
+   {
+       // memset(buffer, '0', 1024);
+       char username[1024];
+       char password[1024];
+       //menerima data dari server
+       valread = read(sock, buffer, 1024);
+       printf("%s", buffer);
+       // memset(buffer, '0', 1024);
+       bzero(buffer, 1024);
+       // getchar();
+       bzero(choice, 1024);
+       //memilih 1(register) atau 2(login)
+       scanf(" %[^\n]s", choice);
+       // getchar();
+       // printf("%s\n", choice);
+       write(sock, choice, strlen(choice));
+```
+Fungsi untuk menjalankan proses register pada client.   
+```c
+//register
+       if (!(strcmp(choice, "1")))
+       {
+           valread = read(sock, buffer, 1024);
+           printf("%s", buffer);
+           scanf(" %[^\n]s", username);
+           write(sock, username, 1024);
+ 
+           valread = read(sock, buffer, 1024);
+           printf("%s", buffer);
+           scanf(" %[^\n]s", password);
+           write(sock, password, 1024);
+       }
+```
+Fungsi untuk memproses input login pada client. 
+```c       
+       else if (!(strcmp(choice, "2")))
+       {
+           while (1)
+           {
+               char aut[1024] = {0};
+               while (strcmp(aut, "") == 0)
+               {
+                   // printf("masuk 2\n");
+                   bzero(buffer, 1024);
+                   valread = read(sock, buffer, 1024);
+                   printf("%s", buffer);
+                   scanf(" %[^\n]s", username);
+                   write(sock, username, 1024);
+ 
+                   bzero(buffer, 1024);
+                   valread = read(sock, buffer, 1024);
+                   printf("%s", buffer);
+                   scanf(" %[^\n]s", password);
+                   write(sock, password, 1024);
+ 
+                   valread = read(sock, aut, 1024);
+               }
+```
+Apabila berhasil melakukan login maka nilai `aut` menjadi 1 dan print output ‘login berhasil’.  
+```c
+while (!strcmp(aut, "1"))
+               {
+                   printf("\nLOGIN BERASIL\n\n");
+                   bzero(buffer, 1024);   
+                   valread = read(sock, buffer, 1024);
+                   printf("%s", buffer);
+                   // memset(buffer, '0', 1024);
+                   bzero(buffer, 1024);
+                   // getchar();
+                   scanf(" %[^\n]s", choice);
+                   // getchar();
+                   write(sock, choice, 1024);
+```
+Command add oleh client pada server untuk melakukan kirim file data yang nantinya akan dibaca dan diterima server.
+```c
+if (!strcmp(choice, "add"))
+                   {
+                       char kirim[1024] = {0};
+                       valread = read(sock, buffer, 1024);
+                       printf("%s", buffer);
+                       // memset(buffer, '0', 1024);
+                       bzero(buffer, 1024);
+                       scanf("%s", kirim);
+                       write(sock, kirim, 1024);
+                       // memset(kirim, '0', 1024);
+                       bzero(buffer, 1024);
+                      
+                       valread = read(sock, buffer, 1024);
+                       printf("%s", buffer);
+                       // memset(buffer, '0', 1024);
+                       bzero(buffer, 1024);
+                       scanf("%s", kirim);
+                       write(sock, kirim, 1024);
+                       // memset(kirim, '0', 1024);
+                       bzero(buffer, 1024);
+                      
+                       valread = read(sock, buffer, 1024);
+                       printf("%s", buffer);
+                       scanf("%s", kirim);
+                       write(sock, kirim, 1024);
+                       // memset(kirim, '0', 1024); // file.extensi
+                       printf("%s", kirim);
+ 
+                       FILE* file = fopen(kirim, "rb");
+                       char data[1024] = {0};
+ 
+                       while(fgets(data, 1024, file) != NULL)
+                       {
+                           write(sock, data, strlen(data));
+                           // memset(data, '0', 1024);
+                           bzero(data, 1024);
+                       }
+                       fclose(file);
+                   }
+```
+Command see pada client.
+```c
+else if (!strcmp(choice, "see"))
+                   {
+                       bzero(buffer, 1024);
+                       read(sock, buffer, 1024);
+                       printf("%s", buffer);
+                       bzero(buffer, 1024);
+                   }
+```
+Command download dari client. Client akan menerima data file yang dikirimkan server. Client menerima data file dengan nama file dan ekstensi yang sama dari server dan akan membuat file baru dengan nama file dan extensi yang sama pada client.  
+```c
+else if (!strncmp(choice, "download", 8))
+                   {
+                       // printf("flag1\n");
+                       char buku[1024];
+                       strcpy(buku, choice);
+                       char* token;
+                       char* simpen = buku;
+                       for (int i = 0; token = strtok_r(simpen, " ", &simpen); i++)
+                       {
+                           // printf("flag2\n");
+                           bzero(buffer, 1024);
+                           strcpy(buffer, token);
+                       }
+                       char pathclient[1024] = "/Users/didofabianfayed/Downloads/modul3/soal1/client/";
+                       strcat(pathclient, buffer);
+                      
+                       bzero(buffer, 1024);
+                       if (strcmp(buffer, "buku tidak ditemukan") && strcmp(buffer, "masukkan nama buku"))
+                       {
+                           FILE* file = fopen(pathclient, "w");
+                  
+                           valread = read(sock, buffer, 1024);
+                           fprintf(file, "%s", buffer);
+                   
+ 
+                           fclose(file);
+                           printf("buku telah diunduh\n\n");
+                       }
+                       else
+                       {
+                           printf("%s\n", buffer);
+                       }
+                   }
+```
+Command delete pada client
+ ```c
+ 
+                   else if (!strncmp(choice, "delete", 6))
+                   {
+                       bzero(buffer, 1024);
+                       valread = read(sock, buffer, 1024);
+                       printf("%s\n", buffer);
+                       bzero(buffer, 1024);
+                   }
+```
+
+Command  find pada client
+```c
+		else if (!strncmp(choice, "find", 4))
+                   {
+                       bzero(buffer, 1024);
+                       read(sock, buffer, 1024);
+                       printf("%s\n", buffer);
+                       bzero(buffer, 1024);
+                   }
+```
 
 
 ### Hasil Output ###
