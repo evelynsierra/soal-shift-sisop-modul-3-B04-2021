@@ -573,6 +573,20 @@ else if (!strncmp(choice, "delete", 6))
    return 0;
 }
 ```
+###Hasil Output###
+-1. Register, login dan add
+![register, login, add](https://user-images.githubusercontent.com/80528848/119257904-979b9380-bbf1-11eb-841c-e8ab0d9ca5de.png)
+-2. Penampakan folder server
+![penampakan folder server](https://user-images.githubusercontent.com/80528848/119257927-b6018f00-bbf1-11eb-91a0-6845f5d38cbd.png)
+-3. Download
+![download](https://user-images.githubusercontent.com/80528848/119257952-d3cef400-bbf1-11eb-9b5c-64fb8e3f89a8.png)
+-4. See, find
+![see, find](https://user-images.githubusercontent.com/80528848/119257936-bef26080-bbf1-11eb-9173-50f39dc4d3cd.png)
+-5. Delete
+![+delete](https://user-images.githubusercontent.com/80528848/119257964-ddf0f280-bbf1-11eb-8bb8-1019e765f68d.png)
+-6. Penampakan file pada FILES yang telah di delete
+![penampakan file pada server seletah didelete](https://user-images.githubusercontent.com/80528848/119257965-e0ebe300-bbf1-11eb-9b7b-7bd7d0376eba.png)
+
 
 
 ## Soal 2 ##
